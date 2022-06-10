@@ -367,6 +367,8 @@ int main(void)
     K_value3 = AT24CXX_ReadLenByte(4, 2);
     if (K_value3 > 10000)
         K_value3 = 10000;
+    
+    
     while (1) /*循环执行的函数*/
     {
         if (ADC_CUR_OK)
