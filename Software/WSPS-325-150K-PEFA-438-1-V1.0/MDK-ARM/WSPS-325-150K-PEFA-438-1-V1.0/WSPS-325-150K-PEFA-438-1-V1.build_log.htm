@@ -1,0 +1,150 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.33.0.0
+Copyright (C) 2020 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: XX xiaoyang, XX, LIC=R4HV2-977MI-WKQB8-3W955-F18V9-R8PG2
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.33.0.0
+Toolchain Path:  C:\Keil_v5\ARM\ARMCLANG\Bin
+C Compiler:      ArmClang.exe V6.15
+Assembler:       Armasm.exe V6.15
+Linker/Locator:  ArmLink.exe V6.15
+Library Manager: ArmAr.exe V6.15
+Hex Converter:   FromElf.exe V6.15
+CPU DLL:         SARMCM3.DLL V5.33.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.8.0
+Dialog DLL:      TCM.DLL V1.48.0.0
+ 
+<h2>Project:</h2>
+E:\product\WSPS-325-150K-PEFA\Software\WSPS-325-150K-PEFA-438-1-V1.0\MDK-ARM\WSPS-325-150K-PEFA-438-1-V1.0.uvprojx
+Project File Date:  06/16/2022
+
+<h2>Output:</h2>
+*** Using Compiler 'V6.15', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
+Build target 'WSPS-325-150K-PEFA-438-1-V1.0'
+compiling main.c...
+../App/dc_rs485.c(36): error: use of undeclared identifier 'UART3_DMA_TX'
+        UART3_DMA_TX[0] = PowerAddr;
+        ^
+../App/dc_rs485.c(37): error: use of undeclared identifier 'UART3_DMA_TX'
+        UART3_DMA_TX[1] = 0x03;
+        ^
+../App/dc_rs485.c(38): error: use of undeclared identifier 'UART3_DMA_TX'
+        UART3_DMA_TX[2] = 0x00;
+        ^
+../App/dc_rs485.c(39): error: use of undeclared identifier 'UART3_DMA_TX'
+        UART3_DMA_TX[3] = 0x00;
+        ^
+../App/dc_rs485.c(40): error: use of undeclared identifier 'UART3_DMA_TX'
+        UART3_DMA_TX[4] = 0x00;
+        ^
+../App/dc_rs485.c(41): error: use of undeclared identifier 'UART3_DMA_TX'
+        UART3_DMA_TX[5] = 0x07; 
+        ^
+../App/dc_rs485.c(42): error: use of undeclared identifier 'UART3_DMA_TX'
+        CRCNum = crc16_modbus((uint8_t *)UART3_DMA_TX, 6);
+                                         ^
+../App/dc_rs485.c(43): error: use of undeclared identifier 'UART3_DMA_TX'
+        UART3_DMA_TX[6] = CRCNum;
+        ^
+../App/dc_rs485.c(44): error: use of undeclared identifier 'UART3_DMA_TX'
+        UART3_DMA_TX[7] = CRCNum >> 8;
+        ^
+../App/dc_rs485.c(45): warning: implicit declaration of function 'USART3_Send' is invalid in C99 [-Wimplicit-function-declaration]
+        USART3_Send(8);
+        ^
+../App/dc_rs485.c(49): warning: implicit declaration of function 'DC_Power_Reivce' is invalid in C99 [-Wimplicit-function-declaration]
+        DC_Power_Reivce();
+        ^
+2 warnings and 9 errors generated.
+compiling dc_rs485.c...
+../App/tcp.c(125): warning: implicit declaration of function 'I2C_EE_ByteWrite' is invalid in C99 [-Wimplicit-function-declaration]
+        I2C_EE_ByteWrite(&buffer[1], 0);
+        ^
+../App/tcp.c(131): error: use of undeclared identifier 'Alarm'
+        Alarm.Reset_Flag = Data;
+        ^
+../App/tcp.c(193): error: use of undeclared identifier 'Alarm'
+        if(Alarm.Flow_Value == Data)
+           ^
+../App/tcp.c(196): error: use of undeclared identifier 'Alarm'
+        Alarm.Flow_Value = Data;
+        ^
+../App/tcp.c(204): error: use of undeclared identifier 'Alarm'
+        if(Alarm.FlowTemp_Value == Data)
+           ^
+../App/tcp.c(207): error: use of undeclared identifier 'Alarm'
+        Alarm.FlowTemp_Value = Data;
+        ^
+../App/tcp.c(215): error: use of undeclared identifier 'Alarm'
+        if(Alarm.Voltage_Value == Data)
+           ^
+../App/tcp.c(218): error: use of undeclared identifier 'Alarm'
+        Alarm.Voltage_Value = Data;
+        ^
+../App/tcp.c(226): error: use of undeclared identifier 'Alarm'
+        if(Alarm.Current_Value == Data)
+           ^
+../App/tcp.c(229): error: use of undeclared identifier 'Alarm'
+        Alarm.Current_Value = Data;
+        ^
+../App/tcp.c(237): error: use of undeclared identifier 'Alarm'
+        if(Alarm.Temp_Value == Data)
+           ^
+../App/tcp.c(239): error: use of undeclared identifier 'Alarm'
+        Alarm.Temp_Value = Data;
+        ^
+../App/tcp.c(247): error: use of undeclared identifier 'Alarm'
+        if(Alarm.Pout_Value == Data)
+           ^
+../App/tcp.c(249): error: use of undeclared identifier 'Alarm'
+        Alarm.Pout_Value = Data;
+        ^
+../App/tcp.c(257): error: use of undeclared identifier 'Alarm'
+        if(Alarm.Vswr_Value == Data)
+           ^
+../App/tcp.c(259): error: use of undeclared identifier 'Alarm'
+        Alarm.Vswr_Value = Data;
+        ^
+../App/tcp.c(295): error: use of undeclared identifier 'Modbus'
+            RJ45_Tx_buff[2 * i + 9] = Modbus[i + addr] >> 8;
+                                      ^
+../App/tcp.c(296): error: use of undeclared identifier 'Modbus'
+            RJ45_Tx_buff[2 * i + 10] = Modbus[i + addr];
+                                       ^
+1 warning and 17 errors generated.
+compiling tcp.c...
+"WSPS-325-150K-PEFA-438-1-V1.0\WSPS-325-150K-PEFA-438-1-V1.0" - 26 Error(s), 3 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.7.0.pack
+                ARM.CMSIS.5.7.0
+                CMSIS (Cortex Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.4.0
+
+Package Vendor: Keil
+                https://www.keil.com/pack/Keil.STM32H7xx_DFP.2.7.0.pack
+                Keil.STM32H7xx_DFP.2.7.0
+                STMicroelectronics STM32H7 Series Device Support and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_WSPS-325-150K-PEFA-438-1-V1.0
+  C:\Users\xiaoyang\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include
+  C:\Users\xiaoyang\AppData\Local\Arm\Packs\Keil\STM32H7xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.4.0
+      Include file:  CMSIS\Core\Include\tz_context.h
+Target not created.
+Build Time Elapsed:  00:00:01
+</pre>
+</body>
+</html>
