@@ -28,7 +28,7 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "../../App/dc_rs485.h"
 /* USER CODE END Includes */
 
 extern UART_HandleTypeDef huart3;
@@ -40,7 +40,7 @@ extern UART_HandleTypeDef huart3;
 void MX_USART3_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+void HAL_UART_IDLECallback(UART_HandleTypeDef* uartHandle);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

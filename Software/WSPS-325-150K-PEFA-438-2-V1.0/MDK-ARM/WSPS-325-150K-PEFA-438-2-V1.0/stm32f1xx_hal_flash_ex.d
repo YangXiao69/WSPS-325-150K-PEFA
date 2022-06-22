@@ -21,6 +21,10 @@ wsps-325-150k-pefa-438-2-v1.0\stm32f1xx_hal_flash_ex.o: ../Drivers/STM32F1xx_HAL
 wsps-325-150k-pefa-438-2-v1.0\stm32f1xx_hal_flash_ex.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h
 wsps-325-150k-pefa-438-2-v1.0\stm32f1xx_hal_flash_ex.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma_ex.h
 wsps-325-150k-pefa-438-2-v1.0\stm32f1xx_hal_flash_ex.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h
+wsps-325-150k-pefa-438-2-v1.0\stm32f1xx_hal_flash_ex.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_adc.h
+wsps-325-150k-pefa-438-2-v1.0\stm32f1xx_hal_flash_ex.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_adc_ex.h
 wsps-325-150k-pefa-438-2-v1.0\stm32f1xx_hal_flash_ex.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h
 wsps-325-150k-pefa-438-2-v1.0\stm32f1xx_hal_flash_ex.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h
 wsps-325-150k-pefa-438-2-v1.0\stm32f1xx_hal_flash_ex.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
+wsps-325-150k-pefa-438-2-v1.0\stm32f1xx_hal_flash_ex.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
+wsps-325-150k-pefa-438-2-v1.0\stm32f1xx_hal_flash_ex.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h

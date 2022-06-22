@@ -156,8 +156,8 @@ void Error_Handler(void);
 #define P_D10_GPIO_Port GPIOC
 #define P_D11_Pin GPIO_PIN_11
 #define P_D11_GPIO_Port GPIOC
-#define P_12_Pin GPIO_PIN_12
-#define P_12_GPIO_Port GPIOC
+#define P_D12_Pin GPIO_PIN_12
+#define P_D12_GPIO_Port GPIOC
 #define AD1_D0_Pin GPIO_PIN_0
 #define AD1_D0_GPIO_Port GPIOD
 #define AD1_D1_Pin GPIO_PIN_1

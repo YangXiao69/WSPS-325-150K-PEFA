@@ -105,11 +105,14 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-    Task_TCP();
-    Task_UDP();
-    Task_Control();  
-    Task_DC_Read_Data();
+
     /* USER CODE BEGIN 3 */
+      Task_TCP();
+      Task_UDP();
+      Task_Write_Modbus();
+      Task_Control();
+      Task_DC_Read_Data();
+      Task_Ads8411_Receive_Data();
   }
   /* USER CODE END 3 */
 }

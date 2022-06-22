@@ -40,4 +40,4 @@ wsps-325-150k-pefa-438-1-v1.0/tcp.o: ..\App\tcp.c ..\App\tcp.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
   ..\Core\Inc\..\..\W5500\types.h ..\Core\Inc\..\..\W5500\.\w5500.h \
   ..\Core\Inc\..\..\W5500\.\socket.h ..\Core\Inc\..\..\W5500\Types.h \
-  ..\App\task.h
+  ..\App\task.h ..\App\..\Core\Inc\bsp_i2c_ee.h

@@ -21,7 +21,7 @@
 #include "usart.h"
 
 /* USER CODE BEGIN 0 */
-
+#include "../../App/dc_rs485.h"
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart3;
@@ -47,10 +47,12 @@ void MX_USART3_UART_Init(void)
   huart3.Init.Parity = UART_PARITY_NONE;
   huart3.Init.Mode = UART_MODE_TX_RX;
   huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart3.Init.OverSampling = UART_OVERSAMPLING_8;
   huart3.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
   huart3.Init.ClockPrescaler = UART_PRESCALER_DIV1;
-  huart3.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  huart3.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_RXOVERRUNDISABLE_INIT|UART_ADVFEATURE_DMADISABLEONERROR_INIT;
+  huart3.AdvancedInit.OverrunDisable = UART_ADVFEATURE_OVERRUN_DISABLE;
+  huart3.AdvancedInit.DMADisableonRxError = UART_ADVFEATURE_DMA_DISABLEONRXERROR;
   if (HAL_UART_Init(&huart3) != HAL_OK)
   {
     Error_Handler();
@@ -148,6 +150,8 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     HAL_NVIC_SetPriority(USART3_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(USART3_IRQn);
   /* USER CODE BEGIN USART3_MspInit 1 */
+    __HAL_UART_ENABLE_IT(&huart3,UART_IT_IDLE);
+    HAL_UART_Receive_DMA(&huart3,UART3_DMA_RX,64);
 
   /* USER CODE END USART3_MspInit 1 */
   }
@@ -183,6 +187,42 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef* uartHandle)
+{
+    uint32_t temp = 0;
+
+    
+
+}
+
+void HAL_UART_IDLECallback(UART_HandleTypeDef* uartHandle)
+{
+    uint32_t temp = 0;
+    
+    if(USART3 == uartHandle->Instance)
+    {
+        if(__HAL_UART_GET_FLAG(&huart3, UART_FLAG_IDLE) != RESET) //如果产生串口空闲中断
+        {		
+            __HAL_UART_CLEAR_IDLEFLAG(&huart3);          	//这句话很关键，没有这句话无法清除串口空闲中断	
+            HAL_UART_DMAStop(&huart3); 
+            DC_Power_Reivce();
+            temp  =  __HAL_DMA_GET_COUNTER(&hdma_usart3_rx);// 获取DMA中未传输的数据个数 
+            HAL_UART_Receive_DMA(&huart3, UART3_DMA_RX, 64);
+        }    
+    }
+
+
+}
+
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef* uartHandle)
+{
+
+    __HAL_UART_CLEAR_IDLEFLAG(uartHandle);
+
+}
+
 
 /* USER CODE END 1 */
 

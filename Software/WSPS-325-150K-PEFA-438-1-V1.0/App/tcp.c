@@ -1,6 +1,7 @@
 #include "tcp.h"
 #include "../../W5500/w5500_conf.h"
 #include "task.h"
+#include "../Core/Inc/bsp_i2c_ee.h"
 
 uint8_t RJ45_Rx_buff[128];
 uint8_t RJ45_Tx_buff[128];
@@ -124,12 +125,7 @@ void Modbus_Progress(uint16_t Addr,uint16_t Data)
         System.Modbus_Addr = Data;
         I2C_EE_ByteWrite(&buffer[1], 0);
         delay_ms(5);
-        break;
-    
-
-    case 0x007f:
-        Alarm.Reset_Flag = Data;
-        break;
+        break;    
     
     case 0x0080:
         System.Power = Data; /* µÁ‘¥ */
@@ -187,81 +183,7 @@ void Modbus_Progress(uint16_t Addr,uint16_t Data)
 //            send_TOP(0,&iap_buf,1);
 //            NVIC_SystemReset();
 //        }
-//        break;
-        
-    case 0x00e4:
-        if(Alarm.Flow_Value == Data)
-            return;         
-    
-        Alarm.Flow_Value = Data;
-        I2C_EE_ByteWrite(&buffer[0], 33);
-        delay_ms(5);
-        I2C_EE_ByteWrite(&buffer[1], 34); 
-        delay_ms(5);
-        break;
-    
-    case 0x00e5:
-        if(Alarm.FlowTemp_Value == Data)
-            return;         
-    
-        Alarm.FlowTemp_Value = Data;
-        I2C_EE_ByteWrite(&buffer[0], 35);
-        delay_ms(5);
-        I2C_EE_ByteWrite(&buffer[1], 36); 
-        delay_ms(5);
-        break;
-    
-    case 0x00e6:
-        if(Alarm.Voltage_Value == Data)
-            return;        
-    
-        Alarm.Voltage_Value = Data;
-        I2C_EE_ByteWrite(&buffer[0], 19);
-        delay_ms(5);
-        I2C_EE_ByteWrite(&buffer[1], 20); 
-        delay_ms(5);
-        break;
-    
-    case 0x00e7:
-        if(Alarm.Current_Value == Data)
-            return;          
-    
-        Alarm.Current_Value = Data;
-        I2C_EE_ByteWrite(&buffer[0], 21);
-        delay_ms(5);
-        I2C_EE_ByteWrite(&buffer[1], 22);             
-        delay_ms(5);
-        break;
-
-    case 0x00e8:
-        if(Alarm.Temp_Value == Data)
-            return;        
-        Alarm.Temp_Value = Data;
-        I2C_EE_ByteWrite(&buffer[0], 23);
-        delay_ms(5);
-        I2C_EE_ByteWrite(&buffer[1], 24);             
-        delay_ms(5);
-        break;
-
-    case 0x00e9:
-        if(Alarm.Pout_Value == Data)
-            return;           
-        Alarm.Pout_Value = Data;
-        I2C_EE_ByteWrite(&buffer[0], 51);
-        delay_ms(5);
-        I2C_EE_ByteWrite(&buffer[1], 52);             
-        delay_ms(5);  
-        break;
-
-    case 0x00ea:
-        if(Alarm.Vswr_Value == Data)
-            return;   
-        Alarm.Vswr_Value = Data;
-        I2C_EE_ByteWrite(&buffer[0], 53);
-        delay_ms(5);
-        I2C_EE_ByteWrite(&buffer[1], 54);             
-        delay_ms(5);        
-        break;
+//        break;       
         
     default:
         break;

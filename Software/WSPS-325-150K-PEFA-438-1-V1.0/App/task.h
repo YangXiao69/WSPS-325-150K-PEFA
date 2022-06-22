@@ -111,7 +111,10 @@ void Task_Control(void);
 void Task_Write_Modbus(void);
 
 extern struct sSystem System;
-
+extern struct sAmplifierModule AmplifierModule[12];
+extern struct sDC_Power DC_Power[3];
+extern uint16_t Modbus[1024];
+void Task_Ads8411_Receive_Data(void);
 
 #endif
 

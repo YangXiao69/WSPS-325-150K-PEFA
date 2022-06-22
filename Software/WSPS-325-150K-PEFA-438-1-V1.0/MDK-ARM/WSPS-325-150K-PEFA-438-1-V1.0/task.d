@@ -40,4 +40,4 @@ wsps-325-150k-pefa-438-1-v1.0/task.o: ..\App\task.c ..\App\task.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
   ..\Core\Inc\..\..\W5500\types.h ..\Core\Inc\..\..\W5500\.\w5500.h \
   ..\Core\Inc\..\..\W5500\.\socket.h ..\Core\Inc\..\..\W5500\Types.h \
-  ..\Core\Inc\..\..\App\led.h
+  ..\Core\Inc\..\..\App\led.h ..\Core\Inc\bsp_i2c_ee.h

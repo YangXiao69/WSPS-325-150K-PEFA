@@ -1,5 +1,6 @@
 --cpu Cortex-M7.fp.dp
 "wsps-325-150k-pefa-438-1-v1.0\startup_stm32h743xx.o"
+"wsps-325-150k-pefa-438-1-v1.0\bsp_i2c_ee.o"
 "wsps-325-150k-pefa-438-1-v1.0\main.o"
 "wsps-325-150k-pefa-438-1-v1.0\gpio.o"
 "wsps-325-150k-pefa-438-1-v1.0\dma.o"

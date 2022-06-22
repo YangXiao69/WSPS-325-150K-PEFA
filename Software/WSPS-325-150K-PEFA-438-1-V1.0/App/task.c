@@ -1,13 +1,15 @@
 #include "task.h"
 #include "../../W5500/w5500_conf.h"
 #include "../../App/led.h"
+#include "bsp_i2c_ee.h"
+
 
 
 uint16_t Modbus[1024];
 struct sSystem System;
 
-
-
+struct sAmplifierModule AmplifierModule[12];
+struct sDC_Power DC_Power[3];
 
 
 //延时nus
@@ -62,10 +64,12 @@ void delay_ms(uint16_t nms)
 
 void Device_Init(void)
 {
-    w5500_init();
+    I2C_EE_Init();
+    
+    w5500_init();       /*spi4  udp*/
     socket_buf_init(txsize, rxsize); /*初始化8个Socket的发送接收缓存大小*/
 
-    w5500_top_init();
+    w5500_top_init();   /*spi2   tcp*/
     socket_buf_init_top(txsize, rxsize); /*初始化8个Socket的发送接收缓存大小*/
     
 }
@@ -113,33 +117,16 @@ void Task_Write_Modbus(void)
     uint8_t Addr;
     
     Modbus[0x0011] = System.Modbus_Addr;
-
-    Modbus[0x007e] = Alarm.HightPlay_Value;
-    Modbus[0x007f] = Alarm.Reset_Flag;         /*系统复位*/
     
     Modbus[0x0080] = System.Power;                  /* 电源 */
     Modbus[0x0081] = System.RF ;                      /* 射频 */
     Modbus[0x0082] = System.Pset ;                 
-    Modbus[0x0083] = System.Freq;
-    Modbus[0x0084] = Sweep_Frq.Switch;
-    Modbus[0x0085] = Sweep_Frq.Step;
+
     Modbus[0x0086] = System.Duty;
     Modbus[0x0087] = System.PulseWidth;
-    Modbus[0x0088] = Sweep_Frq.Start_Frq;
-    Modbus[0x0089] = Sweep_Frq.Stop_Frq;
-    Modbus[0x008a] = Alarm.Magnetic;
-    Modbus[0x008b] = Alarm.HightPlay_Switch;
+
     Modbus[0x008C] = System.Phase_Dfrc ;        //相位差    
-//    Modbus[0x008D] =              /*幅度*/
-    Modbus[0x008e] = Sweep_Frq.Status;
-    Modbus[0x008f] = Sweep_Frq.Current_Frq;
-    Modbus[0x0090] = Sweep_Frq.Progress;
-//    Modbus[0x0091] = Alarm.HightPlay_Switch;  /*打火保护*/
-//    Modbus[0x0092] = Sweep_Frq.Step;
-//    Modbus[0x0093] = Sweep_Frq.Start_Frq;
-//    Modbus[0x0094] = Sweep_Frq.Stop_Frq;    
-//    Modbus[0x0095] = Alarm.Magnetic;
-    Modbus[0x00A0] = Alarm.AlarmError;
+
 
     Modbus[0x00A1] = System.PowerOut;
     Modbus[0x00A2] = System.PowerR;
@@ -152,7 +139,6 @@ void Task_Write_Modbus(void)
 //    Modbus[0x00A8] = System.Freq;
 //    Modbus[0x00A9] = System.Duty;
 //    Modbus[0x00AA] = System.PulseWidth;
-    Modbus[0x00AB] = Alarm.HightPlay_Num;
     Modbus[0x00AC] = System.Temp.HCQ;
     Modbus[0x00AD] = System.Temp.Cold_Plate_1;
     Modbus[0x00AE] = System.Temp.Cold_Plate_2;
@@ -161,19 +147,12 @@ void Task_Write_Modbus(void)
     Modbus[0x00B0] = System.FlowTemp;       /*新增*/
     Modbus[0x00B1] = System.Flow;
     Modbus[0x00B2] = System.Mode;
-    Modbus[0x00B3] = Sweep_Frq.Time;
     
     Modbus[0x00E0] = System.Pout_factor[System.Mode];
     Modbus[0x00E1] = System.PRout_factor;
     Modbus[0x00E2] = System.fPout_factor;
     
-    Modbus[0x00E4] = Alarm.Flow_Value;
-    Modbus[0x00E5] = Alarm.FlowTemp_Value;
-    Modbus[0x00E6] = Alarm.Voltage_Value;
-    Modbus[0x00E7] = Alarm.Current_Value;        
-    Modbus[0x00E8] = Alarm.Temp_Value;   
-    Modbus[0x00E9] = Alarm.Pout_Value;        
-    Modbus[0x00EA] = Alarm.Vswr_Value;       
+      
     
     Addr = i * 0x05;
     Modbus[0x0100 + Addr] = AmplifierModule[i].error;   //告警
@@ -182,7 +161,7 @@ void Task_Write_Modbus(void)
     Modbus[0x0103 + Addr] = AmplifierModule[i].Temp[1]; //温度 
     Modbus[0x0104 + Addr] = AmplifierModule[i].Current; //电流
     i++;
-    if(i >= 16)
+    if(i >= 12)
         i = 0;
     
     Addr = pA * 0x03;
@@ -190,12 +169,16 @@ void Task_Write_Modbus(void)
     Modbus[0x301 + Addr] = DC_Power[pA].Current; 
     Modbus[0x302 + Addr] = DC_Power[pA].Temp;
     pA++;
-    if(pA >= 6)
+    if(pA >= 3)
         pA = 0;
 }
 
 
+void Task_Ads8411_Receive_Data(void)
+{
+    System.PowerOut = GPIOG->IDR;
 
+}
 
 
 

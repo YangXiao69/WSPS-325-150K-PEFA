@@ -70,8 +70,12 @@ void Error_Handler(void);
 #define P_D0_GPIO_Port GPIOG
 #define P_D1_Pin GPIO_PIN_1
 #define P_D1_GPIO_Port GPIOG
+#define W5500_RST1_Pin GPIO_PIN_8
+#define W5500_RST1_GPIO_Port GPIOE
 #define SPI4_NSS_Pin GPIO_PIN_11
 #define SPI4_NSS_GPIO_Port GPIOE
+#define W5500_RST2_Pin GPIO_PIN_10
+#define W5500_RST2_GPIO_Port GPIOB
 #define SPI2_NSS_Pin GPIO_PIN_12
 #define SPI2_NSS_GPIO_Port GPIOB
 #define P_D2_Pin GPIO_PIN_2

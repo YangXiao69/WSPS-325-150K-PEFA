@@ -1,4 +1,9 @@
 #include "dc_rs485.h"
+#include "task.h"
+#include "usart.h"
+
+uint8_t UART3_DMA_TX[64];
+uint8_t UART3_DMA_RX[64];
 
 /*
  *  CRCÐ£Ñé
@@ -20,6 +25,12 @@ uint16_t crc16_modbus(uint8_t *data, uint8_t length) // 0106000100179804
     }
     return crc;
 }
+
+void USART3_Send(uint8_t len)
+{
+	HAL_UART_Transmit_DMA(&huart3, UART3_DMA_TX, len); 
+}
+
 
 void Task_DC_Read_Data(void)
 {
@@ -46,7 +57,7 @@ void Task_DC_Read_Data(void)
         
         PowerAddr++;
         
-        DC_Power_Reivce();
+
     }
     i++;
 }

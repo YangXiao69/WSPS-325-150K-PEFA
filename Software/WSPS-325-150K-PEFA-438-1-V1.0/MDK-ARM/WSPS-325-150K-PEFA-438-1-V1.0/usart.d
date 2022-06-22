@@ -36,4 +36,6 @@ wsps-325-150k-pefa-438-1-v1.0/usart.o: ..\Core\Src\usart.c \
   ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_spi.h \
   ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_spi_ex.h \
   ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_uart.h \
-  ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_uart_ex.h
+  ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_uart_ex.h \
+  ..\Core\Inc\..\..\App\dc_rs485.h ..\Core\Inc\main.h \
+  ..\Core\Src\..\..\App\dc_rs485.h

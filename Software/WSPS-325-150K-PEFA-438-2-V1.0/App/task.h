@@ -10,11 +10,11 @@ struct sSystem
     uint16_t RPout;
 };
 
-
-void delay_10ns(uint8_t i);
-void delay_ms(uint8_t i);
-void  Task_Get_Ads8411_Data(void);
-void Task_Send_Data(void);
+void delay_10ns(uint16_t nCount);
+void delay_us( uint32_t time_us );
+void delay_ms(uint8_t time_ms);
+void Task_Get_Ads8411_Data(void);
+void Task_Ads8411_Send_Data(void);
 #endif
 
 

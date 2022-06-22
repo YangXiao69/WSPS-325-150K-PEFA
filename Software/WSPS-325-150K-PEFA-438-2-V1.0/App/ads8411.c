@@ -23,7 +23,7 @@ void adsCONVST_Start_A(void)
     HAL_GPIO_WritePin(AD1_BYTE_GPIO_Port,AD1_BYTE_Pin,GPIO_PIN_RESET);  //adsBYTE = 0;
     HAL_GPIO_WritePin(AD1_RD_GPIO_Port,AD1_RD_Pin,GPIO_PIN_RESET);  //adsRD = 0;
     HAL_GPIO_WritePin(AD1_CONVST_GPIO_Port,AD1_CONVST_Pin,GPIO_PIN_SET);   /*CONVST = 1*/
-    delay_10ns(3);
+    delay_10ns(50);
     HAL_GPIO_WritePin(AD1_CONVST_GPIO_Port,AD1_CONVST_Pin,GPIO_PIN_RESET);   /*CONVST = 0*/
     while(HAL_GPIO_ReadPin(AD1_BUSY_GPIO_Port,AD1_BUSY_Pin));    //等待 adsBUSY 信号消失
 }
@@ -41,7 +41,7 @@ uint16_t ads8411_Conversion_A(void)
     uint16_t data;
     adsCONVST_Start_A();
 
-    delay_10ns(5);
+    delay_10ns(50);
     data = ((uint16_t)GPIOD->IDR);
     return data;
 }
@@ -54,7 +54,8 @@ uint16_t get_ADS8411Data_A(void)
     for(i=0; i<1000; i++)    // 1ms
     {
         data = ads8411_Conversion_A();
-        if(MaxData < data)	MaxData = data;
+        if(MaxData < data)	
+            MaxData = data;
     }
     return MaxData;
 }
@@ -68,7 +69,7 @@ void adsCONVST_Start_B(void)
     HAL_GPIO_WritePin(AD2_BYTE_GPIO_Port,AD2_BYTE_Pin,GPIO_PIN_RESET);  //adsBYTE = 0;
     HAL_GPIO_WritePin(AD2_RD_GPIO_Port,AD2_RD_Pin,GPIO_PIN_RESET);  //adsRD = 0;
     HAL_GPIO_WritePin(AD2_CONVST_GPIO_Port,AD2_CONVST_Pin,GPIO_PIN_SET);   /*CONVST = 1*/
-    delay_10ns(3);
+    delay_10ns(50);
     HAL_GPIO_WritePin(AD2_CONVST_GPIO_Port,AD2_CONVST_Pin,GPIO_PIN_RESET);   /*CONVST = 0*/
     while(HAL_GPIO_ReadPin(AD2_BUSY_GPIO_Port,AD2_BUSY_Pin));    //等待 adsBUSY 信号消失
 }
@@ -86,7 +87,7 @@ uint16_t ads8411_Conversion_B(void)
     uint16_t data;
     adsCONVST_Start_B();
 
-    delay_10ns(5);
+    delay_10ns(50);
     data = ((uint16_t)GPIOE->IDR);
     return data;
 }
@@ -99,7 +100,8 @@ uint16_t get_ADS8411Data_B(void)
     for(i=0; i<1000; i++)    // 1ms
     {
         data = ads8411_Conversion_B();
-        if(MaxData < data)	MaxData = data;
+        if(MaxData < data)	
+            MaxData = data;
     }
     return MaxData;
 }
