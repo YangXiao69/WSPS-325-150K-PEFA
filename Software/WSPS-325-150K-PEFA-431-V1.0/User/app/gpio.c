@@ -16,21 +16,21 @@ void Addr_Init(void)
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
     GPIO_Init(GPIOE, &GPIO_InitStructure);
 
-    if (GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_8))
+    if (GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_8) == 0)
         addr += 128;
-    if (GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_9))
+    if (GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_9) == 0)
         addr += 64;
-    if (GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_10))
+    if (GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_10) == 0)
         addr += 32;
-    if (GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_11))
+    if (GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_11) == 0)
         addr += 16;
-    if (GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_12))
+    if (GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_12) == 0)
         addr += 8;
-    if (GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_13))
+    if (GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_13) == 0)
         addr += 4;
-    if (GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_14))
+    if (GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_14) == 0)
         addr += 2;
-    if (GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_15))
+    if (GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_15) == 0)
         addr += 1;
     if(addr == 0)
     {
@@ -40,25 +40,6 @@ void Addr_Init(void)
     System.Addr = addr;
 }
 
-void PPT_SW(uint8_t sw)
-{
-    if (sw)
-    {
-        GPIO_SetBits(GPIOB, GPIO_Pin_5);
-        GPIO_SetBits(GPIOB, GPIO_Pin_8);
-        GPIO_SetBits(GPIOB, GPIO_Pin_9);
-        GPIO_SetBits(GPIOE, GPIO_Pin_0);
-        GPIO_SetBits(GPIOC, GPIO_Pin_14);
-    }
-    else
-    {
-        GPIO_ResetBits(GPIOB, GPIO_Pin_5);
-        GPIO_ResetBits(GPIOB, GPIO_Pin_8);
-        GPIO_ResetBits(GPIOB, GPIO_Pin_9);
-        GPIO_ResetBits(GPIOE, GPIO_Pin_0);
-        GPIO_ResetBits(GPIOC, GPIO_Pin_14);
-    }
-}
 
 
 void LED_ON(uint16_t name)
@@ -117,7 +98,7 @@ void LED_OFF(uint16_t name)
 
 void LED_COML(void)
 {
-    if (GPIO_ReadOutputDataBit(GPIOE, GPIO_Pin_3))
+    if (GPIO_ReadOutputDataBit(GPIOE, GPIO_Pin_6))
         LED_OFF(COMM_LED);
     else
         LED_ON(COMM_LED);

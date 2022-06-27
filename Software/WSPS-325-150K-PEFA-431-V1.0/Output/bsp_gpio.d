@@ -34,3 +34,17 @@
 ..\..\output\bsp_gpio.o: ..\..\User\bsp\bsp_adc.h
 ..\..\output\bsp_gpio.o: ..\..\User\bsp\bsp_ds18b20.h
 ..\..\output\bsp_gpio.o: ..\..\User\bsp\bsp_gpio.h
+..\..\output\bsp_gpio.o: ..\..\User\app\gpio.h
+..\..\output\bsp_gpio.o: ..\..\User\system.h
+..\..\output\bsp_gpio.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+..\..\output\bsp_gpio.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\..\output\bsp_gpio.o: ..\..\User\W5500\w5500.h
+..\..\output\bsp_gpio.o: ..\..\User\W5500\Types.h
+..\..\output\bsp_gpio.o: ..\..\User\W5500\W5500_conf.h
+..\..\output\bsp_gpio.o: ..\..\User\W5500\socket.h
+..\..\output\bsp_gpio.o: ..\..\User\W5500\utility.h
+..\..\output\bsp_gpio.o: ..\..\User\app\ds18b20.h
+..\..\output\bsp_gpio.o: ..\..\User\app\calibration.h
+..\..\output\bsp_gpio.o: ..\..\User\app\gpio.h
+..\..\output\bsp_gpio.o: ..\..\User\app\udp.h
+..\..\output\bsp_gpio.o: ..\..\User\app\memory.h

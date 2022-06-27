@@ -22,17 +22,7 @@ static void DS18B20_Mode_IPU(void)
 	/*调用库函数，初始化DS18B20_PORT*/
 	GPIO_Init(DS18B20_PORT, &GPIO_InitStruct);
     
-        /*选择要控制的GPIO引脚*/
-    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_6;
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IPU;
-	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;    
-    GPIO_Init(GPIOE, &GPIO_InitStruct);  
 
-    /*选择要控制的GPIO引脚*/
-    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_13;
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IPU;
-	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;    
-    GPIO_Init(GPIOC, &GPIO_InitStruct);    
 }
 
 /*
@@ -55,19 +45,7 @@ static void DS18B20_Mode_Out_PP(void)
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
 
 	/*调用库函数，初始化DS18B20_PORT*/
-	GPIO_Init(DS18B20_PORT, &GPIO_InitStruct);
-    
-    /*选择要控制的GPIO引脚*/
-    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_6;
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;    
-    GPIO_Init(GPIOE, &GPIO_InitStruct);  
-
-    /*选择要控制的GPIO引脚*/
-    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_13;
-    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
-    GPIO_Init(GPIOC, &GPIO_InitStruct);      
+	GPIO_Init(DS18B20_PORT, &GPIO_InitStruct);    
     
 }
 
@@ -255,14 +233,8 @@ uint8_t DS18B20_Init(void)
 {
 	DS18B20_GPIO_Config();
 	DS18B20_Rst(1);
-    DS18B20_Presence(1);
-    DS18B20_Rst(2);
-    DS18B20_Presence(2);
-    DS18B20_Rst(3);
-    DS18B20_Presence(3);
-    DS18B20_Rst(4);
 
-	return DS18B20_Presence(4);
+	return DS18B20_Presence(1);
 }
 /*
  * 存储的温度是16 位的带符号扩展的二进制补码形式
@@ -306,7 +278,7 @@ float DS18B20_Get_Temp(uint8_t i)
 	else
 		f_tem = s_tem * 0.0625;
 
-	return f_tem;
+	return f_tem*10;
 }
 
 /**

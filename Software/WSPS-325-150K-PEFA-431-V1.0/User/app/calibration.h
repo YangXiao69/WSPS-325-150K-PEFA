@@ -12,13 +12,12 @@ struct sSystem
     uint16_t K_value;
     uint16_t K_value2;
     uint16_t K_value3;
-    uint16_t temp[9];
     uint16_t Current[4];
     uint16_t Pin;
     uint16_t Pout;
     uint16_t Pfout;
     uint16_t Voltage;
-    uint8_t RF[4];
+    uint8_t RF;
     uint16_t Temp;
 };
 

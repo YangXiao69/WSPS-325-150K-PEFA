@@ -25,15 +25,6 @@ void do_udp(void)
 
         time++;
 
-        if(PowerFlag[0]||PowerFlag[1])
-        {
-            if(time >= 40)
-            {
-                time = 0;
-                set_data(Tx_buff);
-                sendto(0,Tx_buff,24, remote_ip, remote_port);
-            }
-        }
         if(time >= 400)                                                /* 400ms */
         {
             time = 0;
@@ -56,8 +47,8 @@ void do_udp(void)
                 }
                 if(Rx_buff[1] == 0xEE)//清除异常标志位
                 {
-                    PowerFlag[0] = 0x00;
-                    PowerFlag[1] = 0x00;
+//                    PowerFlag[0] = 0x00;
+//                    PowerFlag[1] = 0x00;
                 }
                 if(Rx_buff[1] == 0xAA)//重新启动
                 {
@@ -88,10 +79,6 @@ void do_udp(void)
             }
             //LED_COML();
         }
-        //if(GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_9))	time2++;
-        //else time2=0;
-        //if(time2>=250){ time2=0;LED_OFF(COMM_LED);}
-
         break;
     }
 }

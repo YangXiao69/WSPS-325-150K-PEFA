@@ -174,6 +174,40 @@ void Task_Write_Modbus(void)
 }
 
 
+void Set_GPIO_Outmode(void)
+{
+    GPIO_InitTypeDef GPIO_InitStruct = {0};   
+    __HAL_RCC_GPIOG_CLK_ENABLE();
+    
+    GPIO_InitStruct.Pin = P_D13_Pin|P_D14_Pin|P_D15_Pin|P_D0_Pin
+                          |P_D1_Pin|P_D2_Pin|P_D3_Pin|P_D4_Pin
+                          |P_D5_Pin|P_D6_Pin|P_D7_Pin|P_D8_Pin
+                          |P_D9_Pin|P_D10_Pin|P_D11_Pin|P_D12_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+
+
+}
+
+void Set_GPIO_InMode(void)
+{
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    __HAL_RCC_GPIOG_CLK_ENABLE();
+    
+    GPIO_InitStruct.Pin = P_D0_Pin|P_D1_Pin|P_D2_Pin|P_D3_Pin
+                          |P_D4_Pin|P_D5_Pin|P_D6_Pin|P_D7_Pin
+                          |P_D8_Pin|P_D9_Pin|P_D10_Pin|P_D11_Pin
+                          |P_D12_Pin|P_D13_Pin|P_D14_Pin|P_D15_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+
+
+}
+
+
 void Task_Ads8411_Receive_Data(void)
 {
     System.PowerOut = GPIOG->IDR;
