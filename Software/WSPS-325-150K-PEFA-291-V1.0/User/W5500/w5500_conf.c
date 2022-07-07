@@ -27,12 +27,12 @@ uint8 local_ip[4]={192,168,1, 101};									    /*定义本机IP信息*/
 uint8 subnet[4]={255,255,255,0};												/*定义W5500默认子网掩码*/
 uint8 gateway[4]={192,168,1,1};													/*定义W5500默认网关*/
 uint8 dns_server[4]={114,114,114,114};									/*定义W5500默认DNS*/
-uint16 local_port=5000;	                        				/*定义本地端口*/
+uint16 local_port=8096;	                        				/*定义本地端口*/
 
 
 /*定义目标IP信息*/
 uint8  remote_ip[4]={192,168,1,100};							        /*远端IP地址*/
-uint16 remote_port=5000;		 													  	/*远端端口号*/
+uint16 remote_port=8096;		 													  	/*远端端口号*/
 
 
 void num_INIT(void)

@@ -94,8 +94,18 @@ void Set_GPIO_InMode(void)
 
 void Task_Ads8411_Send_Data(void)
 {
-    GPIOC->ODR = System.Pout;
     
+    HAL_GPIO_TogglePin(S_CLK_GPIO_Port, S_CLK_Pin);
     
+    if(HAL_GPIO_ReadPin(S_CLK_GPIO_Port, S_CLK_Pin) == 1)
+    {
+        GPIOC->ODR = System.Pout;
+    }
+    else
+    {
+        GPIOC->ODR = System.RPout;    
+    }
+
+ 
 }
 

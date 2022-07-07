@@ -554,10 +554,6 @@ uint16 recvfrom(SOCKET s, uint8 * buf, uint16 len, uint8 * addr, uint16 *port)
                 
                 addrbsb = (uint32)(ptr<<8) +  (s<<5) + 0x18;       /* 0X18代表选择socketn接受缓存 */                
             
-                if(data_len >= 11)
-                {
-                    data_len = 10;
-                }
             
                 wiz_read_buf(addrbsb, buf, data_len);                
                 ptr += data_len;

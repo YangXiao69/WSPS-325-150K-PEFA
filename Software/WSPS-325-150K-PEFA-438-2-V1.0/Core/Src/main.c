@@ -94,6 +94,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
     ads8411_reset_A();
     ads8411_reset_B();
+    
   /* USER CODE END 2 */
 
   /* Infinite loop */

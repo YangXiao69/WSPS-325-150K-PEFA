@@ -23,19 +23,19 @@ uint8_t mac2[6]={0x00,0x08,0xdc,0x11,0x11,0x25};
 uint8_t local_ip[4] ={192,168,1,100};										  /*定义设备接口W5500默认IP地址*/
 uint8_t subnet[4]={255,255,255,0};												  /*定义W5500默认子网掩码*/
 uint8_t gateway[4]={192,168,1,1};												  	/*定义W5500默认网关*/
-uint16_t local_port=5000;	                        				  /*定义本地端口*/
+uint16_t local_port=8096;	                        				  /*定义本地端口*/
 
 uint8_t  remote_ip[4]={255,255,255,255};							        /*远端IP地址*/
-uint16_t remote_port=5000;															 	    /*远端端口号*/
+uint16_t remote_port=8096;															 	    /*远端端口号*/
 
 /* 定义IP2与上位机通信信息 */
 uint8_t local_ip2[4] ={192,168,1,105};										    /*定义上位机W5500默认IP地址*/
 uint8_t subnet2[4]   ={255,255,255,0};												/*定义W5500默认子网掩码*/
 uint8_t gateway2[4]  ={192,168,1,1};													/*定义W5500默认网关*/
-uint16_t local_port2 = 5000;	                        			  /*定义本地端口*/
+uint16_t local_port2 = 8096;	                        			  /*定义本地端口*/
 
 uint8_t  remote_ip2[4]={192,168,1,99};							        /*上位机的IP*/
-uint16_t remote_port2=5000;															 	 /*远端端口号*/
+uint16_t remote_port2=8096;															 	 /*远端端口号*/
 
 
 

@@ -54,18 +54,21 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, Machine_LED3_Pin|Machine_LED4_Pin|Machine_LED5_Pin|Machine_LED6_Pin
-                          |W5500_RST1_Pin|SPI4_NSS_Pin|Machine_LED1_Pin|Machine_LED2_Pin, GPIO_PIN_RESET);
+                          |W5500_RST1_Pin|W5500_INIT1_Pin|SPI4_NSS_Pin|LINKLED1_Pin
+                          |Machine_LED1_Pin|Machine_LED2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, W5500_RST2_Pin|SPI2_NSS_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, W5500_RST2_Pin|W5500_INIT2_Pin|SPI2_NSS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(Power_SW_GPIO_Port, Power_SW_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, LINKLED2_Pin|Power_SW_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PEPin PEPin PEPin PEPin
-                           PEPin PEPin PEPin PEPin */
+                           PEPin PEPin PEPin PEPin
+                           PEPin PEPin */
   GPIO_InitStruct.Pin = Machine_LED3_Pin|Machine_LED4_Pin|Machine_LED5_Pin|Machine_LED6_Pin
-                          |W5500_RST1_Pin|SPI4_NSS_Pin|Machine_LED1_Pin|Machine_LED2_Pin;
+                          |W5500_RST1_Pin|W5500_INIT1_Pin|SPI4_NSS_Pin|LINKLED1_Pin
+                          |Machine_LED1_Pin|Machine_LED2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -83,19 +86,25 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PBPin PBPin */
-  GPIO_InitStruct.Pin = W5500_RST2_Pin|SPI2_NSS_Pin;
+  /*Configure GPIO pins : PBPin PBPin PBPin */
+  GPIO_InitStruct.Pin = W5500_RST2_Pin|W5500_INIT2_Pin|SPI2_NSS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = Power_SW_Pin;
+  /*Configure GPIO pins : PDPin PDPin */
+  GPIO_InitStruct.Pin = LINKLED2_Pin|Power_SW_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(Power_SW_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = S_CLK_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(S_CLK_GPIO_Port, &GPIO_InitStruct);
 
 }
 

@@ -8,8 +8,7 @@ void adc_data(uint16_t num1, uint16_t num2, uint16_t num3)
 {
     float data1, data2, data3;
     
-    if(System.RF == 0)
-    {
+
         if (num1 > 54)
             data1 = num1 - 54;
         else
@@ -25,9 +24,9 @@ void adc_data(uint16_t num1, uint16_t num2, uint16_t num3)
         else
             data3 = 0;
 
-        System.Pout = (0.0117 * data1 * data1 + 0.4095 * data1 + 30.967);
+        System.Pout = (0.0117 * data1 * data1 + 0.4095 * data1 + 1.967);
         
-        System.Pfout = (0.0117 * data2 * data2 + 0.4095 * data2 + 30.967);
+        System.Pfout = (0.0117 * data2 * data2 + 0.4095 * data2 + 1.967);
         
         if (data3 > 1000)
             System.Pin = (0.00036 * data3 * data3 + 0.113 * data3) * 1000 / 1000;
@@ -39,19 +38,13 @@ void adc_data(uint16_t num1, uint16_t num2, uint16_t num3)
             System.Pout = 0;
             System.Pfout = 0;
         }
-    }  
-    else
-    {
-        System.Pout = 0;
-        System.Pfout = 0;     
-    }
     
 }
 
 void POWER_calculate(void)
 {
     uint16_t data1 = 0, data2 = 0, data3 = 0;
-    static uint16_t t = 0,i = 0,c = 0;
+    static uint16_t t = 0,i = 0,c = 0,f = 0;
     static uint16_t power_max = 0, powerR_max = 0;
     static uint32_t powerR_add = 0,power_add = 0;
     float date;
@@ -69,11 +62,11 @@ void POWER_calculate(void)
     t++;
     if(t == 2000)
     {   
-        i++;
+        f++;
           
         power_add += power_max;
         powerR_add += powerR_max;        
-        if(i >= 8)
+        if(f >= 8)
         {                               
             data1 = power_add/8;	/*正向功率*/                                               
             data2 = powerR_add/8;	/*内部反射功率*/
@@ -86,7 +79,7 @@ void POWER_calculate(void)
             powerR_add = 0;
             power_add = 0;
 
-            i = 0; 
+            f = 0; 
         }
         t = 0;
     }
@@ -98,7 +91,7 @@ void POWER_calculate(void)
     }
     
     c++;
-    if (c == 200)
+    if (c == 2000)
     {
         date = max[0];
         System.Voltage = (date / 4096 * 56.52f)*10;

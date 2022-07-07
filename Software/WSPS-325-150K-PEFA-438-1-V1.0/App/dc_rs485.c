@@ -37,10 +37,10 @@ void Task_DC_Read_Data(void)
     uint16_t CRCNum;
     static uint8_t PowerAddr;
     static uint16_t i = 0;
-    if(i >= 5000)
+    if(i >= 1000)
     {
         i = 0;
-        if (PowerAddr >= 7)     /*8个电源插件*/
+        if (PowerAddr >= 4)     /*3个电源插件*/
         {
             PowerAddr = 1;
         }
@@ -65,7 +65,7 @@ void Task_DC_Read_Data(void)
 
 void DC_Power_Reivce(void)
 {
-    if(UART3_DMA_RX[0] <= 6)
+    if(UART3_DMA_RX[0] <= 3)
     {
         DC_Power[UART3_DMA_RX[0]-1].Voltage= (uint16_t)(UART3_DMA_RX[7] << 8)+UART3_DMA_RX[8];
         DC_Power[UART3_DMA_RX[0]-1].Current= (uint16_t)(UART3_DMA_RX[5] << 8)+UART3_DMA_RX[6];

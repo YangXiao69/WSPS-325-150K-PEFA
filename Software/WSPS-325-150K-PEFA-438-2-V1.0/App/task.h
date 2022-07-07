@@ -15,6 +15,9 @@ void delay_us( uint32_t time_us );
 void delay_ms(uint8_t time_ms);
 void Task_Get_Ads8411_Data(void);
 void Task_Ads8411_Send_Data(void);
+void Set_GPIO_Outmode(void);
+void Set_GPIO_InMode(void);
+
 #endif
 
 

@@ -120,6 +120,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
+          <Name>圖?</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -218,6 +219,26 @@
           <count>11</count>
           <WinNumber>1</WinNumber>
           <ItemText>System.Voltage,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>12</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>data1</ItemText>
+        </Ww>
+        <Ww>
+          <count>13</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>data2</ItemText>
+        </Ww>
+        <Ww>
+          <count>14</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>t,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>15</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>i,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>

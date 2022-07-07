@@ -107,12 +107,13 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-      Task_TCP();
-      Task_UDP();
+      Task_TCP_TOP();       /*UDP中间层对上层通信*/
+      Task_UDP();       /*UDP中间层对底层通信*/
       Task_Write_Modbus();
       Task_Control();
       Task_DC_Read_Data();
       Task_Ads8411_Receive_Data();
+      Task_Get_Temp();
   }
   /* USER CODE END 3 */
 }

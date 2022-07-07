@@ -2,14 +2,15 @@
 #include "../../W5500/w5500_conf.h"
 #include "../../App/led.h"
 #include "bsp_i2c_ee.h"
-
-
+#include "bsp_ds18b20.h"
+#include "ds18b20.h"
 
 uint16_t Modbus[1024];
 struct sSystem System;
 
-struct sAmplifierModule AmplifierModule[12];
+struct sAmplifierModule AmplifierModule[13];
 struct sDC_Power DC_Power[3];
+KalmanInfo KFP_height={0,0,1,1,0.1,2,0};
 
 
 //延时nus
@@ -61,10 +62,30 @@ void delay_ms(uint16_t nms)
 
 
 
+double KalmanFilter(KalmanInfo* kalmanInfo, double lastMeasurement)
+{
+	//预测下一时刻的值
+	double predictValue = kalmanInfo->A* kalmanInfo->filterValue;   //x的先验估计由上一个时间点的后验估计值和输入信息给出，此处需要根据基站高度做一个修改
+	
+	//求协方差
+	kalmanInfo->P = kalmanInfo->A*kalmanInfo->A*kalmanInfo->P + kalmanInfo->Q;  //计算先验均方差 p(n|n-1)=A^2*p(n-1|n-1)+q
+	double preValue = kalmanInfo->filterValue;  //记录上次实际坐标的值
+ 
+	//计算kalman增益
+	kalmanInfo->kalmanGain = kalmanInfo->P*kalmanInfo->H / (kalmanInfo->P*kalmanInfo->H*kalmanInfo->H + kalmanInfo->R);  //Kg(k)= P(k|k-1) H’ / (H P(k|k-1) H’ + R)
+	//修正结果，即计算滤波值
+	kalmanInfo->filterValue = predictValue + (lastMeasurement - predictValue)*kalmanInfo->kalmanGain;  //利用残余的信息改善对x(t)的估计，给出后验估计，这个值也就是输出  X(k|k)= X(k|k-1)+Kg(k) (Z(k)-H X(k|k-1))
+	//更新后验估计
+	kalmanInfo->P = (1 - kalmanInfo->kalmanGain*kalmanInfo->H)*kalmanInfo->P;//计算后验均方差  P[n|n]=(1-K[n]*H)*P[n|n-1]
+ 
+	return  kalmanInfo->filterValue;
+}//
 
 void Device_Init(void)
 {
     I2C_EE_Init();
+    
+    DS18B20_GPIO_Config();
     
     w5500_init();       /*spi4  udp*/
     socket_buf_init(txsize, rxsize); /*初始化8个Socket的发送接收缓存大小*/
@@ -99,7 +120,6 @@ void DC_Power_Control(uint8_t sw)           /*一起控还是分开控*/
     {
         HAL_GPIO_WritePin(GPIOF,GPIO_PIN_4,GPIO_PIN_RESET); 
         System.RF = 0; 
-        System.Pset = 0;
     }
     
     LED_DC_Power(sw);
@@ -115,51 +135,26 @@ void Task_Write_Modbus(void)
 {
     static uint8_t i = 0 ,pA = 0;
     uint8_t Addr;
-    
-    Modbus[0x0011] = System.Modbus_Addr;
-    
+        
     Modbus[0x0080] = System.Power;                  /* 电源 */
-    Modbus[0x0081] = System.RF ;                      /* 射频 */
-    Modbus[0x0082] = System.Pset ;                 
-
-    Modbus[0x0086] = System.Duty;
-    Modbus[0x0087] = System.PulseWidth;
-
-    Modbus[0x008C] = System.Phase_Dfrc ;        //相位差    
-
-
-    Modbus[0x00A1] = System.PowerOut;
-    Modbus[0x00A2] = System.PowerR;
-    Modbus[0x00A3] = System.PowerZB;
-    Modbus[0x00A4] = System.PfoutOut;        /*腔压*/
-
-//    Modbus[0x00A5] = System.Power;                  /* 电源 */
-//    Modbus[0x00A6] = System.RF ;                      /* 射频 */
-//    Modbus[0x00A7] = System.Pset ;                 /* 射频 */
-//    Modbus[0x00A8] = System.Freq;
-//    Modbus[0x00A9] = System.Duty;
-//    Modbus[0x00AA] = System.PulseWidth;
-    Modbus[0x00AC] = System.Temp.HCQ;
-    Modbus[0x00AD] = System.Temp.Cold_Plate_1;
-    Modbus[0x00AE] = System.Temp.Cold_Plate_2;
-    Modbus[0x00AF] = System.Temp.PCB_Borad;
+    Modbus[0x0081] = System.RF ;                    /* 射频 */
+    Modbus[0x0082] = System.LED_Alarm_Power ;        
+    Modbus[0x0083] = System.LED_Alarm_Curr ;     
+    Modbus[0x0084] = System.LED_Alarm_Temp ;       
+    Modbus[0x0085] = System.temp;
+    Modbus[0x0086] = System.PowerOut;
+    Modbus[0x0086] = System.PowerR;
     
-    Modbus[0x00B0] = System.FlowTemp;       /*新增*/
-    Modbus[0x00B1] = System.Flow;
-    Modbus[0x00B2] = System.Mode;
-    
-    Modbus[0x00E0] = System.Pout_factor[System.Mode];
-    Modbus[0x00E1] = System.PRout_factor;
-    Modbus[0x00E2] = System.fPout_factor;
-    
-      
-    
-    Addr = i * 0x05;
+    Addr = i * 0x09;
     Modbus[0x0100 + Addr] = AmplifierModule[i].error;   //告警
-    Modbus[0x0101 + Addr] = AmplifierModule[i].Voltage; //电压 
-    Modbus[0x0102 + Addr] = AmplifierModule[i].Temp[0]; //温度 
-    Modbus[0x0103 + Addr] = AmplifierModule[i].Temp[1]; //温度 
-    Modbus[0x0104 + Addr] = AmplifierModule[i].Current; //电流
+    Modbus[0x0101 + Addr] = AmplifierModule[i].Voltage; //电压
+    Modbus[0x0102 + Addr] = AmplifierModule[i].Powerout;
+    Modbus[0x0103 + Addr] = AmplifierModule[i].PowerR;
+    Modbus[0x0104 + Addr] = AmplifierModule[i].Current[0];
+    Modbus[0x0105 + Addr] = AmplifierModule[i].Current[1];
+    Modbus[0x0106 + Addr] = AmplifierModule[i].Current[2];
+    Modbus[0x0107 + Addr] = AmplifierModule[i].Current[3];
+    Modbus[0x0108 + Addr] = AmplifierModule[i].Temp;
     i++;
     if(i >= 12)
         i = 0;
@@ -174,45 +169,22 @@ void Task_Write_Modbus(void)
 }
 
 
-void Set_GPIO_Outmode(void)
-{
-    GPIO_InitTypeDef GPIO_InitStruct = {0};   
-    __HAL_RCC_GPIOG_CLK_ENABLE();
-    
-    GPIO_InitStruct.Pin = P_D13_Pin|P_D14_Pin|P_D15_Pin|P_D0_Pin
-                          |P_D1_Pin|P_D2_Pin|P_D3_Pin|P_D4_Pin
-                          |P_D5_Pin|P_D6_Pin|P_D7_Pin|P_D8_Pin
-                          |P_D9_Pin|P_D10_Pin|P_D11_Pin|P_D12_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
-
-
-}
-
-void Set_GPIO_InMode(void)
-{
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-    __HAL_RCC_GPIOG_CLK_ENABLE();
-    
-    GPIO_InitStruct.Pin = P_D0_Pin|P_D1_Pin|P_D2_Pin|P_D3_Pin
-                          |P_D4_Pin|P_D5_Pin|P_D6_Pin|P_D7_Pin
-                          |P_D8_Pin|P_D9_Pin|P_D10_Pin|P_D11_Pin
-                          |P_D12_Pin|P_D13_Pin|P_D14_Pin|P_D15_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
-
-
-}
-
-
 void Task_Ads8411_Receive_Data(void)
 {
-    System.PowerOut = GPIOG->IDR;
+    if(HAL_GPIO_ReadPin(S_CLK_GPIO_Port, S_CLK_Pin))
+    {
+        System.PowerOut= GPIOG->IDR;
+    }
+    else
+    {
+        System.PowerR = GPIOG->IDR;
+    }
 
 }
 
 
 
+void Task_Get_Temp(void)
+{
+    System.temp = DS18B20_Get_Temp(1);
+}

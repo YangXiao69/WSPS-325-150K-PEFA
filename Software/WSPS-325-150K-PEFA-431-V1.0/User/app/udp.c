@@ -28,7 +28,7 @@ void do_udp(void)
             {
                 time = 0;
                 set_data();
-                sendto(0, Tx_buff, 20, remote_ip, remote_port);
+                sendto(0, Tx_buff, 30, remote_ip, remote_port);
                 LED_COML();
             }
 
@@ -94,28 +94,33 @@ void set_data(void)
 {
     uint16_t AlarmFlag;
 
-
-    Tx_buff[0] = AlarmFlag >> 8;
-    Tx_buff[1] = AlarmFlag;
-    Tx_buff[2] = System.Voltage >> 8;
-    Tx_buff[3] = System.Voltage; //功放电压
-
-    Tx_buff[4] = System.Pin>> 8;
-    Tx_buff[5] = System.Pin; //输入功率
-    Tx_buff[6] = System.Pout >> 8;
-    Tx_buff[7] = System.Pout; //输出功率
-    Tx_buff[8] = System.Pfout >> 8;
-    Tx_buff[9] = System.Pfout; //反射功率
-
-    Tx_buff[10] = System.Current[0] >> 8;
-    Tx_buff[11] = System.Current[0]; //电流
-    Tx_buff[12] = System.Current[1] >> 8;
-    Tx_buff[13] = System.Current[1];
-    Tx_buff[14] = System.Current[2] >> 8;
-    Tx_buff[15] = System.Current[2];
-    Tx_buff[16] = System.Current[3] >> 8;
-    Tx_buff[17] = System.Current[3];
-
-    Tx_buff[18] = System.Temp >> 8;
-    Tx_buff[19] = System.Temp; //功放温度
+    Tx_buff[0] = Rx_buff[0];
+    Tx_buff[1] = Rx_buff[1];
+    Tx_buff[2] = Rx_buff[2];
+    Tx_buff[3] = Rx_buff[3];
+    Tx_buff[4] = Rx_buff[4];
+    Tx_buff[5] = Rx_buff[11]*2+3;
+    Tx_buff[6] = System.Addr;
+    Tx_buff[7] = 0x03;
+    Tx_buff[8] = Rx_buff[11]*2;
+    Tx_buff[9] = AlarmFlag >> 8;
+    Tx_buff[10] = AlarmFlag;
+    Tx_buff[11] = System.Voltage >> 8;
+    Tx_buff[12] = System.Voltage; //功放电压
+    Tx_buff[13] = System.Pin>> 8;
+    Tx_buff[14] = System.Pin; //输入功率
+    Tx_buff[15] = System.Pout >> 8;
+    Tx_buff[16] = System.Pout; //输出功率
+    Tx_buff[17] = System.Pfout >> 8;
+    Tx_buff[18] = System.Pfout; //反射功率
+    Tx_buff[19] = System.Current[0] >> 8;
+    Tx_buff[20] = System.Current[0]; //电流
+    Tx_buff[21] = System.Current[1] >> 8;
+    Tx_buff[22] = System.Current[1];
+    Tx_buff[23] = System.Current[2] >> 8;
+    Tx_buff[24] = System.Current[2];
+    Tx_buff[25] = System.Current[3] >> 8;
+    Tx_buff[26] = System.Current[3];
+    Tx_buff[27] = System.Temp >> 8;
+    Tx_buff[28] = System.Temp; //功放温度
 }
