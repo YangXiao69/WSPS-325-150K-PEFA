@@ -114,26 +114,40 @@ void DC_Power_Control(uint8_t sw)           /*一起控还是分开控*/
 {
     if(sw == ON)
     {
-        HAL_GPIO_WritePin(GPIOF,GPIO_PIN_4,GPIO_PIN_SET);       
+        HAL_GPIO_WritePin(Power_SW_GPIO_Port,Power_SW_Pin,GPIO_PIN_RESET);       
     }
     else
     {
-        HAL_GPIO_WritePin(GPIOF,GPIO_PIN_4,GPIO_PIN_RESET); 
+        HAL_GPIO_WritePin(Power_SW_GPIO_Port,Power_SW_Pin,GPIO_PIN_SET); 
         System.RF = 0; 
     }
     
     LED_DC_Power(sw);
 }
 
+void Error_Control(void)
+{
+    if(System.LED_Alarm_Power != 0 ||System.LED_Alarm_Curr != 0 || System.LED_Alarm_Temp)
+    {
+        LED_Alarm(1);
+    }
+    else
+    {
+        LED_Alarm(0);
+    }
+}
+
 void Task_Control(void)
 {
     DC_Power_Control(System.Power);
     Ptt_Control(System.RF);
+    Error_Control();
 }
 
 void Task_Write_Modbus(void)
 {
     static uint8_t i = 0 ,pA = 0;
+    
     uint8_t Addr;
         
     Modbus[0x0080] = System.Power;                  /* 电源 */
@@ -169,7 +183,7 @@ void Task_Write_Modbus(void)
 }
 
 
-void Task_Ads8411_Receive_Data(void)
+void Task_Ads8411_Send_Data(void)
 {
     if(HAL_GPIO_ReadPin(S_CLK_GPIO_Port, S_CLK_Pin))
     {
@@ -183,8 +197,14 @@ void Task_Ads8411_Receive_Data(void)
 }
 
 
-
 void Task_Get_Temp(void)
 {
-    System.temp = DS18B20_Get_Temp(1);
+    static uint16_t t_num;
+    
+    t_num++;
+    if(t_num >= 10000)
+    {
+        System.temp = DS18B20_Get_Temp(1);
+        t_num = 0;
+    }
 }

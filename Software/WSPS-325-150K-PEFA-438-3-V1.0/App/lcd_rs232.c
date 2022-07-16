@@ -1,6 +1,7 @@
 #include "lcd_rs232.h"
 #include "task.h"
 #include "usart.h"
+#include "tcp.h"
 
 uint8_t UART2_DMA_TX[64];
 uint8_t UART2_DMA_RX[64];
@@ -32,34 +33,90 @@ void USART2_Send(uint8_t len)
 }
 
 
-void Task_DC_Read_Data(void)
+void work_232send_buff(uint16_t addr,uint8_t len,uint8_t way)
 {
-    uint16_t CRCNum;
-    static uint8_t PowerAddr;
-    static uint16_t i = 0;
-    if(i >= 5000)
+    uint16_t i,crc; 
+	
+    if(len>120) 
+        return;
+    		
+    if(way==0x03)                                                     //读
     {
-        i = 0;
-        if (PowerAddr >= 7)     /*8个电源插件*/
+        UART2_DMA_TX[0] = UART2_DMA_RX[0];
+        UART2_DMA_TX[1] = way;
+        UART2_DMA_TX[2]=len*2; 	
+        for(i=0;i< len;i++)
         {
-            PowerAddr = 1;
+            UART2_DMA_RX[2*i+3] = Modbus[i+addr]>>8;
+            UART2_DMA_RX[2*i+4] = Modbus[i+addr];
         }
-        UART2_DMA_TX[0] = PowerAddr;
-        UART2_DMA_TX[1] = 0x03;
-        UART2_DMA_TX[2] = 0x00;
-        UART2_DMA_TX[3] = 0x00;
-        UART2_DMA_TX[4] = 0x00;
-        UART2_DMA_TX[5] = 0x07; 
-        CRCNum = crc16_modbus((uint8_t *)UART2_DMA_TX, 6);
-        UART2_DMA_TX[6] = CRCNum;
-        UART2_DMA_TX[7] = CRCNum >> 8;
-        USART2_Send(8);
-        
-        PowerAddr++;
-        
-
+        crc=crc16_modbus(UART2_DMA_TX,3+len*2);
+        UART2_DMA_TX[3+len*2] = crc;
+        UART2_DMA_TX[4+len*2] = crc>>8;
+        USART2_Send(5+len*2);				
     }
-    i++;
+    else if(way==0x06)                                              //写
+    {
+        UART2_DMA_TX[0] = UART2_DMA_RX[0];
+        UART2_DMA_TX[1] = way;
+        UART2_DMA_TX[2] = addr>>8; 
+        UART2_DMA_TX[3] = addr;	
+        UART2_DMA_TX[4] = Modbus[addr]>>8;
+        UART2_DMA_TX[5] = Modbus[addr];				
+        crc=crc16_modbus(UART2_DMA_RX,6);
+        UART2_DMA_TX[6] = crc;
+        UART2_DMA_TX[7] = crc>>8;
+        USART2_Send(8);						
+    }
+    else if(way==0x10)                                             //写
+    {
+        UART2_DMA_TX[0] = UART2_DMA_RX[0];
+        UART2_DMA_TX[1] = way;
+        UART2_DMA_TX[2]=addr>>8; 
+        UART2_DMA_TX[3]=addr;	
+        UART2_DMA_TX[4] = 0;  	 
+        UART2_DMA_TX[5] = len;					  
+        crc=crc16_modbus(UART2_DMA_TX,6);
+        UART2_DMA_TX[6] = crc;
+        UART2_DMA_TX[7] = crc>>8;	
+        USART2_Send(8);		
+    }	
+}
+
+void Modbus_RS232_reseive(void)
+{
+    uint16_t Data = 0, ADDR = 0,i,mNum,mData;         
+
+
+    if (UART2_DMA_RX[0] == System.Modbus_Addr || UART2_DMA_RX[0] == 0x00)
+    {
+        if (UART2_DMA_RX[1] == 0x06) /* 写指令 */
+        {
+            ADDR = ((uint16_t)UART2_DMA_RX[2] << 8) + UART2_DMA_RX[3];   //访问地址
+            Data = ((uint16_t)UART2_DMA_RX[4] << 8) + UART2_DMA_RX[5]; //写数据 或者 读取长度
+            Modbus_Progress(ADDR,Data);
+            work_232send_buff(ADDR, 1, 0x06);
+        }
+        else if (UART2_DMA_RX[1] == 0x03) /*读指令*/
+        {
+            ADDR = ((uint16_t)UART2_DMA_RX[2] << 8) + UART2_DMA_RX[3];   //访问地址
+            Data = ((uint16_t)UART2_DMA_RX[4] << 8) + UART2_DMA_RX[5]; //写数据 或者 读取长度
+            work_232send_buff(ADDR, Data, 0x03);
+        }
+        else if (UART2_DMA_RX[1] == 0x10) //连续写
+        {
+            ADDR = ((uint16_t)UART2_DMA_RX[2] << 8) + UART2_DMA_RX[3];   //访问地址
+            Data = ((uint16_t)UART2_DMA_RX[4] << 8) + UART2_DMA_RX[5]; //写数据 或者 读取长度
+            for(i=0;i<Data;i++)
+            {
+                mData = ((uint16_t)UART2_DMA_RX[7+i*2] << 8) + UART2_DMA_RX[8+i*2];
+                Modbus_Progress(ADDR,mData);
+                ADDR++;
+            }
+            Data = ((uint16_t)UART2_DMA_RX[4] << 8) + UART2_DMA_RX[5]; //写数据 或者 读取长度            
+            work_232send_buff(ADDR, Data, 0x10);
+        }
+    }
 }
 
 

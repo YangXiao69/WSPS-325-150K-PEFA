@@ -3,7 +3,6 @@
 "wsps-325-150k-pefa-438-3-v1.0\main.o"
 "wsps-325-150k-pefa-438-3-v1.0\gpio.o"
 "wsps-325-150k-pefa-438-3-v1.0\adc.o"
-"wsps-325-150k-pefa-438-3-v1.0\bdma.o"
 "wsps-325-150k-pefa-438-3-v1.0\dac.o"
 "wsps-325-150k-pefa-438-3-v1.0\dma.o"
 "wsps-325-150k-pefa-438-3-v1.0\spi.o"
@@ -43,10 +42,12 @@
 "wsps-325-150k-pefa-438-3-v1.0\tcp.o"
 "wsps-325-150k-pefa-438-3-v1.0\udp.o"
 "wsps-325-150k-pefa-438-3-v1.0\lcd_rs232.o"
+"wsps-325-150k-pefa-438-3-v1.0\ds18b20.o"
 "wsps-325-150k-pefa-438-3-v1.0\w5500_conf.o"
 "wsps-325-150k-pefa-438-3-v1.0\w5500.o"
 "wsps-325-150k-pefa-438-3-v1.0\socket.o"
 "wsps-325-150k-pefa-438-3-v1.0\bsp_i2c_ee.o"
+"wsps-325-150k-pefa-438-3-v1.0\bsp_ds18b20.o"
 --strict --scatter "WSPS-325-150K-PEFA-438-3-V1.0\WSPS-325-150K-PEFA-438-3-V1.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

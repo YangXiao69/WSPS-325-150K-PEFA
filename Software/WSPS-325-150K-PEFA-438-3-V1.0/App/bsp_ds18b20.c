@@ -40,18 +40,10 @@ void DS18B20_GPIO_Config(void)
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     /*调用库函数，使用上面配置的GPIO_InitStructure初始化GPIO*/
     HAL_GPIO_Init(DS18B20_PORT, &GPIO_InitStruct);
-
-    /*选择要控制的GPIO引脚*/
-    GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_6;
-    HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);  
-
-    /*选择要控制的GPIO引脚*/
-    GPIO_InitStruct.Pin = GPIO_PIN_13;
-    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);      
+  
 
     HAL_GPIO_WritePin(DS18B20_PORT, DS18B20_PIN, GPIO_PIN_SET);
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_5|GPIO_PIN_6, GPIO_PIN_SET);
+
 
 }
 

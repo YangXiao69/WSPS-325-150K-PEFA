@@ -45,4 +45,4 @@ wsps-325-150k-pefa-438-3-v1.0/lcd_rs232.o: ..\App\lcd_rs232.c \
   ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_uart.h \
   ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_uart_ex.h \
   ..\App\task.h ..\Core\Inc\usart.h ..\Core\Inc\main.h \
-  ..\Core\Inc\..\..\App\lcd_rs232.h
+  ..\Core\Inc\..\..\App\lcd_rs232.h ..\App\tcp.h

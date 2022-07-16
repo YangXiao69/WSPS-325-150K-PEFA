@@ -1,4 +1,6 @@
-#include "./../../system.h"
+#include "bsp_ds18b20.h"
+#include "task.h"
+#include "ds18b20.h"
 
 /*
  * 函数名：DS18B20_Mode_IPU
@@ -24,19 +26,6 @@ static void DS18B20_Mode_IPU(void)
 	/*调用库函数，初始化DS18B20_PORT*/
 	HAL_GPIO_Init(DS18B20_PORT, &GPIO_InitStruct);
     
-        /*选择要控制的GPIO引脚*/
-    GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_6;
-	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;    
-    HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);  
-
-    /*选择要控制的GPIO引脚*/
-    GPIO_InitStruct.Pin = GPIO_PIN_13;
-	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;    
-    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);    
 }
 
 /*
@@ -63,20 +52,7 @@ static void DS18B20_Mode_Out_PP(void)
 
 	/*调用库函数，初始化DS18B20_PORT*/
 	HAL_GPIO_Init(DS18B20_PORT, &GPIO_InitStruct);
-    
-    /*选择要控制的GPIO引脚*/
-    GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_6;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;    
-    HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);  
-
-    /*选择要控制的GPIO引脚*/
-    GPIO_InitStruct.Pin = GPIO_PIN_13;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);      
+       
     
 }
 
@@ -134,13 +110,13 @@ static void DS18B20_Rst(uint8_t i)
 	DS18B20_DATA_OUT(i,DS18B20_LOW);
 
 	/* 主机至少产生480us的低电平复位信号 */
-	CPU_TS_Tmr_Delay_US(750);
+	delay_us(750);
 
 	/* 主机在产生复位信号后，需将总线拉高 */
 	DS18B20_DATA_OUT(i,DS18B20_HIGH);
 
 	/*从机接收到主机的复位信号后，会在15~60us后给主机发一个存在脉冲*/
-	CPU_TS_Tmr_Delay_US(15);
+	delay_us(15);
 }
 
 /*
@@ -161,7 +137,7 @@ static uint8_t DS18B20_Presence(uint8_t i)
 	while (DS18B20_DATA_IN(i) && pulse_time < 100)
 	{
 		pulse_time++;
-		CPU_TS_Tmr_Delay_US(1);
+		delay_us(1);
 	}
 	/* 经过100us后，存在脉冲都还没有到来*/
 	if (pulse_time >= 100)
@@ -173,7 +149,7 @@ static uint8_t DS18B20_Presence(uint8_t i)
 	while (!DS18B20_DATA_IN(i) && pulse_time < 240)
 	{
 		pulse_time++;
-		CPU_TS_Tmr_Delay_US(1);
+		delay_us(1);
 	}
 	if (pulse_time >= 240)
 		return 1;
@@ -192,11 +168,11 @@ static uint8_t DS18B20_Read_Bit(uint8_t i)
 	DS18B20_Mode_Out_PP();
 	/* 读时间的起始：必须由主机产生 >1us <15us 的低电平信号 */
 	DS18B20_DATA_OUT(i,DS18B20_LOW);
-	CPU_TS_Tmr_Delay_US(10);
+	delay_us(10);
 
 	/* 设置成输入，释放总线，由外部上拉电阻将总线拉高 */
 	DS18B20_Mode_IPU();
-	CPU_TS_Tmr_Delay_US(2);
+	delay_us(2);
 
 	if (DS18B20_DATA_IN(i) == SET)
 		dat = 1;
@@ -204,7 +180,7 @@ static uint8_t DS18B20_Read_Bit(uint8_t i)
 		dat = 0;
 
 	/* 这个延时参数请参考时序图 */
-	CPU_TS_Tmr_Delay_US(45);
+	delay_us(45);
 
 	return dat;
 }
@@ -242,20 +218,20 @@ void DS18B20_Write_Byte(uint8_t a,uint8_t dat)
 		{
 			DS18B20_DATA_OUT(a,DS18B20_LOW);
 			/* 1us < 这个延时 < 15us */
-			CPU_TS_Tmr_Delay_US(8);
+			delay_us(8);
 
 			DS18B20_DATA_OUT(a,DS18B20_HIGH);
-			CPU_TS_Tmr_Delay_US(58);
+			delay_us(58);
 		}
 		else
 		{
 			DS18B20_DATA_OUT(a,DS18B20_LOW);
 			/* 60us < Tx 0 < 120us */
-			CPU_TS_Tmr_Delay_US(70);
+			delay_us(70);
 
 			DS18B20_DATA_OUT(a,DS18B20_HIGH);
 			/* 1us < Trec(恢复时间) < 无穷大*/
-			CPU_TS_Tmr_Delay_US(2);
+			delay_us(2);
 		}
 	}
 }

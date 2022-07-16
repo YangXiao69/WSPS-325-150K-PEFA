@@ -102,6 +102,7 @@ void remote_RJ45_reseive(uint8_t sa)
             {
                 mData = ((uint16_t)RJ45_Rx_buff[13+i*2] << 8) + RJ45_Rx_buff[14+i*2];
                 Modbus_Progress(ADDR,mData);
+                ADDR++;
             }
             work_RJ45send_buff(sa,ADDR, RJ45_Rx_buff[12], 0x10);
         }

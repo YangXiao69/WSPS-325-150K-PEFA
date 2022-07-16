@@ -126,6 +126,8 @@ void Error_Handler(void);
 #define P_D14_GPIO_Port GPIOG
 #define P_D15_Pin GPIO_PIN_15
 #define P_D15_GPIO_Port GPIOG
+#define S_CLK_Pin GPIO_PIN_8
+#define S_CLK_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

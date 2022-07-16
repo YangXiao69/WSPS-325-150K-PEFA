@@ -23,9 +23,9 @@
 /*Òý½Å¶¨Òå*/
 /************************************************************/
 
-#define DS18B20_PIN GPIO_PIN_3
-#define DS18B20_PORT GPIOD
-#define DS18B20_CLK_ENABLE() __GPIOD_CLK_ENABLE()
+#define DS18B20_PIN GPIO_PIN_5
+#define DS18B20_PORT GPIOB
+#define DS18B20_CLK_ENABLE() __GPIOB_CLK_ENABLE()
 
 /************************************************************/
 

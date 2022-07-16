@@ -112,7 +112,7 @@ int main(void)
       Task_Write_Modbus();
       Task_Control();
       Task_DC_Read_Data();
-      Task_Ads8411_Receive_Data();
+      Task_Ads8411_Send_Data();
       Task_Get_Temp();
   }
   /* USER CODE END 3 */

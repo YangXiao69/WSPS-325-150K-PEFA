@@ -4,7 +4,7 @@
 
 void LED_DC_Power(uint8_t sw);
 void LED_Comm_Toggle(void);
-
+void LED_Alarm(uint8_t sw);
 #endif
 
 

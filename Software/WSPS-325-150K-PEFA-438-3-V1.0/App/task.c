@@ -2,15 +2,15 @@
 #include "../../W5500/w5500_conf.h"
 #include "../../App/led.h"
 #include "bsp_i2c_ee.h"
-
+#include "ds18b20.h"
 
 
 uint16_t Modbus[1024];
 struct sSystem System;
 
-struct sAmplifierModule AmplifierModule[12];
-struct sDC_Power DC_Power[3];
-
+struct sAmplifierModule AmplifierModule[48];
+struct sDC_Power DC_Power[12];
+struct sSlave_Device Slave_Device[4];
 
 //延时nus
 // nus为要延时的us数.
@@ -113,7 +113,7 @@ void Task_Control(void)
 
 void Task_Write_Modbus(void)
 {
-    static uint8_t i = 0 ,pA = 0;
+    static uint8_t i = 0 ,pA = 0,sd;
     uint8_t Addr;
     
     Modbus[0x0011] = System.Modbus_Addr;
@@ -125,103 +125,63 @@ void Task_Write_Modbus(void)
     Modbus[0x0086] = System.Duty;
     Modbus[0x0087] = System.PulseWidth;
 
-    Modbus[0x008C] = System.Phase_Dfrc ;        //相位差    
-
 
     Modbus[0x00A1] = System.PowerOut;
     Modbus[0x00A2] = System.PowerR;
     Modbus[0x00A3] = System.PowerZB;
-    Modbus[0x00A4] = System.PfoutOut;        /*腔压*/
+    Modbus[0x00A4] = System.PfoutOut;  
 
-//    Modbus[0x00A5] = System.Power;                  /* 电源 */
-//    Modbus[0x00A6] = System.RF ;                      /* 射频 */
-//    Modbus[0x00A7] = System.Pset ;                 /* 射频 */
-//    Modbus[0x00A8] = System.Freq;
-//    Modbus[0x00A9] = System.Duty;
-//    Modbus[0x00AA] = System.PulseWidth;
-    Modbus[0x00AC] = System.Temp.HCQ;
-    Modbus[0x00AD] = System.Temp.Cold_Plate_1;
-    Modbus[0x00AE] = System.Temp.Cold_Plate_2;
-    Modbus[0x00AF] = System.Temp.PCB_Borad;
-    
-    Modbus[0x00B0] = System.FlowTemp;       /*新增*/
-    Modbus[0x00B1] = System.Flow;
-    Modbus[0x00B2] = System.Mode;
-    
-    Modbus[0x00E0] = System.Pout_factor[System.Mode];
-    Modbus[0x00E1] = System.PRout_factor;
-    Modbus[0x00E2] = System.fPout_factor;
-    
+
+//    Modbus[0x00AF] = System.Temp.PCB_Borad;
       
+    Addr = sd*0x03;
+    Modbus[0x00f0 + Addr] = System.Pout_factor[System.Mode];
+    Modbus[0x00f1 + Addr] = System.PRout_factor;
+    Modbus[0x00f2 + Addr] = System.fPout_factor;
+    sd++;
+    if(sd >= 4)     /*4个从机控制盒*/
+        sd = 0;    
     
-    Addr = i * 0x05;
-    Modbus[0x0100 + Addr] = AmplifierModule[i].error;   //告警
-    Modbus[0x0101 + Addr] = AmplifierModule[i].Voltage; //电压 
-    Modbus[0x0102 + Addr] = AmplifierModule[i].Temp[0]; //温度 
-    Modbus[0x0103 + Addr] = AmplifierModule[i].Temp[1]; //温度 
-    Modbus[0x0104 + Addr] = AmplifierModule[i].Current; //电流
+    Addr = i * 0x0a;
+    Modbus[0x0100 + Addr] = AmplifierModule[i].Addr;   //
+    Modbus[0x0101 + Addr] = AmplifierModule[i].Powerout; // 
+    Modbus[0x0102 + Addr] = AmplifierModule[i].PowerR; // 
+    Modbus[0x0103 + Addr] = AmplifierModule[i].Voltage; // 
+    Modbus[0x0104 + Addr] = AmplifierModule[i].Current[0]; //电流
+    Modbus[0x0105 + Addr] = AmplifierModule[i].Current[1]; //电流
+    Modbus[0x0106 + Addr] = AmplifierModule[i].Current[2]; //电流
+    Modbus[0x0107 + Addr] = AmplifierModule[i].Current[3]; //电流
+    Modbus[0x0108 + Addr] = AmplifierModule[i].Temp; //
+    Modbus[0x0109 + Addr] = AmplifierModule[i].error; //
     i++;
-    if(i >= 12)
+    if(i >= 48)     /*48个功放插件*/
         i = 0;
     
     Addr = pA * 0x03;
-    Modbus[0x300 + Addr] = DC_Power[pA].Voltage;
-    Modbus[0x301 + Addr] = DC_Power[pA].Current; 
-    Modbus[0x302 + Addr] = DC_Power[pA].Temp;
+    Modbus[0x370 + Addr] = DC_Power[pA].Voltage;
+    Modbus[0x371 + Addr] = DC_Power[pA].Current; 
+    Modbus[0x372 + Addr] = DC_Power[pA].Temp;
     pA++;
-    if(pA >= 3)
+    if(pA >= 12)        /*12个电源插件*/
         pA = 0;
-}
-
-
-void Set_GPIO_Outmode(void)
-{
-    GPIO_InitTypeDef GPIO_InitStruct = {0};   
-    __HAL_RCC_GPIOG_CLK_ENABLE();
-    
-    GPIO_InitStruct.Pin = P_D13_Pin|P_D14_Pin|P_D15_Pin|P_D0_Pin
-                          |P_D1_Pin|P_D2_Pin|P_D3_Pin|P_D4_Pin
-                          |P_D5_Pin|P_D6_Pin|P_D7_Pin|P_D8_Pin
-                          |P_D9_Pin|P_D10_Pin|P_D11_Pin|P_D12_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
-
-
-}
-
-void Set_GPIO_InMode(void)
-{
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-    __HAL_RCC_GPIOG_CLK_ENABLE();
-    
-    GPIO_InitStruct.Pin = P_D0_Pin|P_D1_Pin|P_D2_Pin|P_D3_Pin
-                          |P_D4_Pin|P_D5_Pin|P_D6_Pin|P_D7_Pin
-                          |P_D8_Pin|P_D9_Pin|P_D10_Pin|P_D11_Pin
-                          |P_D12_Pin|P_D13_Pin|P_D14_Pin|P_D15_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
-
-
 }
 
 
 void Task_Ads8411_Receive_Data(void)
 {
-    GPIOC->ODR = 0x0f;
-//    Set_GPIO_InMode();
-//    System.PowerOut = GPIOG->IDR;
-//    Set_GPIO_Outmode();
-    
-    
-    GPIOC->ODR = 0xf0;   
-//    Set_GPIO_InMode();
-//    System.PowerR = GPIOG->IDR;
-//    Set_GPIO_Outmode();
-        
+    if(HAL_GPIO_ReadPin(S_CLK_GPIO_Port, S_CLK_Pin))
+    {
+        System.PowerOut= GPIOG->IDR;
+    }
+    else
+    {
+        System.PowerR = GPIOG->IDR;
+    }
+
 }
 
+void Task_Get_temp(void)
+{
+   System.Temp = DS18B20_Get_Temp(1);
 
-
+}

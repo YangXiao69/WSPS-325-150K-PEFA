@@ -20,7 +20,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
-#include "bdma.h"
 #include "dac.h"
 #include "dma.h"
 #include "spi.h"
@@ -108,7 +107,6 @@ int main(void)
   MX_USART2_UART_Init();
   MX_DMA_Init();
   MX_TIM4_Init();
-  MX_BDMA_Init();
   MX_ADC3_Init();
   /* USER CODE BEGIN 2 */
   Device_Init();
@@ -127,6 +125,7 @@ int main(void)
       Task_Write_Modbus();
       Task_Control();
       Task_Ads8411_Receive_Data();
+      Task_Get_temp();
       /*¸æ¾¯*/
       /*ÏÔÊ¾ÆÁ*/
       /*ADC/DAC*/

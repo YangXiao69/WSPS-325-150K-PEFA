@@ -5,13 +5,7 @@
 #define OFF 0
 #define ON  1
 
-struct sTemp
-{
-    float PCB_Borad;
-    float HCQ;
-    float Cold_Plate_1;
-    float Cold_Plate_2;
-};
+
 
 struct sError_Num
 {
@@ -59,13 +53,21 @@ struct sDC_Power
     uint16_t Current; 
 };
 
+struct sSlave_Device
+{
+    uint16_t temp;
+    uint16_t PowerOut;
+    uint16_t PowerR;
+};
 
 struct sAmplifierModule
 {
     uint8_t Addr;
+    uint16_t Powerout;
+    uint16_t PowerR;
     uint16_t Voltage;
-    uint16_t Current;
-    uint16_t Temp[2];
+    uint16_t Current[4];
+    uint16_t Temp;
     uint16_t error;
 };
 
@@ -76,33 +78,19 @@ struct sSystem
     uint8_t Duty;     /* 占空比 */
     uint16_t Pset;        /* 设定功率 */
     uint16_t PulseWidth; /* 脉宽 */    
-    uint32_t Freq;
     uint16_t Mode;
-    
-    uint16_t StepPset;
-    uint16_t StepFreq;
-    uint16_t StepDuty;
-    uint16_t StepPulseWidth;
+    uint16_t Temp;
     
     float PowerOut;
     float PfoutOut;
     float PowerR;
     float PowerZB;
 
-    float Flow;
-    float FlowTemp;
-    uint16_t Phase_Dfrc;
-
     uint16_t Pout_factor[2];
     uint16_t PRout_factor;
     uint16_t fPout_factor;
     uint8_t Modbus_Addr;
-    
-    struct sTemp Temp;
-    
-    uint8_t UDP_Ready;
-    uint8_t LCD_Addr;
-    uint16_t LCD_Addr_Num;
+        
 };
 
 void Device_Init(void);
@@ -111,10 +99,16 @@ void Task_Control(void);
 void Task_Write_Modbus(void);
 
 extern struct sSystem System;
-extern struct sAmplifierModule AmplifierModule[12];
-extern struct sDC_Power DC_Power[3];
+extern struct sAmplifierModule AmplifierModule[48];
+extern struct sDC_Power DC_Power[12];
+extern struct sSlave_Device Slave_Device[4];
+
 extern uint16_t Modbus[1024];
 void Task_Ads8411_Receive_Data(void);
+void Task_Get_temp(void);
+
+void delay_us(uint32_t nus);
+void delay_ms(uint16_t nms);
 
 #endif
 

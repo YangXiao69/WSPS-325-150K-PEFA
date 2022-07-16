@@ -5,13 +5,7 @@
 #define OFF 0
 #define ON  1
 
-struct sTemp
-{
-    float PCB_Borad;
-    float HCQ;
-    float Cold_Plate_1;
-    float Cold_Plate_2;
-};
+
 
 struct sDC_Power
 {
@@ -66,7 +60,7 @@ extern struct sSystem System;
 extern struct sAmplifierModule AmplifierModule[13];
 extern struct sDC_Power DC_Power[3];
 extern uint16_t Modbus[1024];
-void Task_Ads8411_Receive_Data(void);
+void Task_Ads8411_Send_Data(void);
 void Task_Get_Temp(void);
 #endif
 

@@ -1,6 +1,7 @@
 --cpu Cortex-M7.fp.dp
 "wsps-325-150k-pefa-438-1-v1.0\startup_stm32h743xx.o"
 "wsps-325-150k-pefa-438-1-v1.0\bsp_i2c_ee.o"
+"wsps-325-150k-pefa-438-1-v1.0\bsp_ds18b20.o"
 "wsps-325-150k-pefa-438-1-v1.0\main.o"
 "wsps-325-150k-pefa-438-1-v1.0\gpio.o"
 "wsps-325-150k-pefa-438-1-v1.0\dma.o"
@@ -8,7 +9,6 @@
 "wsps-325-150k-pefa-438-1-v1.0\usart.o"
 "wsps-325-150k-pefa-438-1-v1.0\stm32h7xx_it.o"
 "wsps-325-150k-pefa-438-1-v1.0\stm32h7xx_hal_msp.o"
-"wsps-325-150k-pefa-438-1-v1.0\bsp_ds18b20.o"
 "wsps-325-150k-pefa-438-1-v1.0\stm32h7xx_hal_cortex.o"
 "wsps-325-150k-pefa-438-1-v1.0\stm32h7xx_hal_rcc.o"
 "wsps-325-150k-pefa-438-1-v1.0\stm32h7xx_hal_rcc_ex.o"

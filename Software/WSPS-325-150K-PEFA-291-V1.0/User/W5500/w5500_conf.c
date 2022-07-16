@@ -19,7 +19,7 @@
 
 CONFIG_MSG  ConfigMsg;																	  /*配置结构体*/
 
-uint8_t NumName = 1;
+uint8_t NumName = 0;
 
 uint8 mac[6]={0x00,0x08,0xdc,0x11,0x11,0x11};           /*定义MAC地址,如果多块W5500网络适配板在同一现场工作，请使用不同的MAC地址*/
 uint8 local_ip[4]={192,168,1, 101};									    /*定义本机IP信息*/	  

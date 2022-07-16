@@ -43,7 +43,6 @@ void do_udp(void)
                     K_value = (Rx_buff[2] << 8) + Rx_buff[3];
                     I2C_EE_ByteWrite(&Rx_buff[2],252);
                     I2C_EE_ByteWrite(&Rx_buff[3],253);
-                    
                 }
                 if(Rx_buff[1] == 0xEE)//清除异常标志位
                 {
@@ -58,24 +57,24 @@ void do_udp(void)
             }
             else
             {
-                Power = Rx_buff[0];
-                if(Rx_buff[1] == 0x01) {
+//                Power = Rx_buff[0];
+                if(Rx_buff[0] == 0x01) {
                     PPT_SW(ON);
                 }//{	PPT_SW(ON);  LED_ON(RFOUT_LED);  }
-                if(Rx_buff[1] == 0x00) {
+                if(Rx_buff[0] == 0x00) {
                     PPT_SW(OFF);
                 }//{	PPT_SW(OFF); LED_OFF(RFOUT_LED); }
-                Power_V  = Rx_buff[2];
-                Power_T  = Rx_buff[3];
-                Power_I  = Rx_buff[4];
-                Power_VP = Rx_buff[5];
-                Power_VF = Rx_buff[6];
-                Power_ZB = Rx_buff[7];
+//                Power_V  = Rx_buff[2];
+//                Power_T  = Rx_buff[3];
+//                Power_I  = Rx_buff[4];
+//                Power_VP = Rx_buff[5];
+//                Power_VF = Rx_buff[6];
+//                Power_ZB = Rx_buff[7];
 
-                Alarm_Temp_Value = ((uint16_t)Rx_buff[8]<<8) + Rx_buff[9];
-                Alarm_Curr_Value  = Rx_buff[10];
-                Alarm_Vswr_Value  = Rx_buff[11];
-                Alarm_Pout_Value = ((uint16_t)Rx_buff[12]<<8) + Rx_buff[13];
+//                Alarm_Temp_Value = ((uint16_t)Rx_buff[8]<<8) + Rx_buff[9];
+//                Alarm_Curr_Value  = Rx_buff[10];
+//                Alarm_Vswr_Value  = Rx_buff[11];
+//                Alarm_Pout_Value = ((uint16_t)Rx_buff[12]<<8) + Rx_buff[13];
             }
             //LED_COML();
         }

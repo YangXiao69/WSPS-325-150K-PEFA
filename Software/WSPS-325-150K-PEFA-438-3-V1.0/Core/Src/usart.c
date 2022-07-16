@@ -187,14 +187,6 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 
 /* USER CODE BEGIN 1 */
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef* uartHandle)
-{
-    uint32_t temp = 0;
-
-    
-
-}
-
 void HAL_UART_IDLECallback(UART_HandleTypeDef* uartHandle)
 {
     uint32_t temp = 0;
@@ -204,7 +196,7 @@ void HAL_UART_IDLECallback(UART_HandleTypeDef* uartHandle)
         {		
             __HAL_UART_CLEAR_IDLEFLAG(&huart2);          	//这句话很关键，没有这句话无法清除串口空闲中断	
             HAL_UART_DMAStop(&huart2); 
-//            DC_Power_Reivce();
+            Modbus_RS232_reseive();
             temp  =  __HAL_DMA_GET_COUNTER(&hdma_usart2_rx);// 获取DMA中未传输的数据个数 
             HAL_UART_Receive_DMA(&huart2, UART2_DMA_RX, 64);
         }    

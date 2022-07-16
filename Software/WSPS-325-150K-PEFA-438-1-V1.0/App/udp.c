@@ -79,14 +79,14 @@ void UDP_Revice(uint8_t addr,uint8_t *buffer)       /*00 01 02 03 04 05 06 07 */
     {
         return;
     }
-    AmplifierModule[addr].Voltage = (uint16_t)(buffer[8]<<8)+buffer[9];
-    AmplifierModule[addr].Powerout = (uint16_t)(buffer[12]<<8)+buffer[13];
-    AmplifierModule[addr].PowerR = (uint16_t)(buffer[14]<<8)+buffer[15];
-    AmplifierModule[addr].Current[0] = (uint16_t)(buffer[16]<<8)+buffer[17];
-    AmplifierModule[addr].Current[1] = (uint16_t)(buffer[18]<<8)+buffer[19];
-    AmplifierModule[addr].Current[2] = (uint16_t)(buffer[20]<<8)+buffer[21];
-    AmplifierModule[addr].Current[3] = (uint16_t)(buffer[22]<<8)+buffer[23];
-    AmplifierModule[addr].Temp = (uint16_t)(buffer[24]<<8)+buffer[25];
+    AmplifierModule[addr].Voltage = (uint16_t)(buffer[11]<<8)+buffer[12];
+    AmplifierModule[addr].Powerout = (uint16_t)(buffer[15]<<8)+buffer[16];
+    AmplifierModule[addr].PowerR = (uint16_t)(buffer[17]<<8)+buffer[18];
+    AmplifierModule[addr].Current[0] = (uint16_t)(buffer[19]<<8)+buffer[20];
+    AmplifierModule[addr].Current[1] = (uint16_t)(buffer[21]<<8)+buffer[22];
+    AmplifierModule[addr].Current[2] = (uint16_t)(buffer[23]<<8)+buffer[24];
+    AmplifierModule[addr].Current[3] = (uint16_t)(buffer[25]<<8)+buffer[26];
+    AmplifierModule[addr].Temp = (uint16_t)(buffer[27]<<8)+buffer[28];
 }
 
 

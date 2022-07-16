@@ -56,8 +56,6 @@ void Task_DC_Read_Data(void)
         USART3_Send(8);
         
         PowerAddr++;
-        
-
     }
     i++;
 }
